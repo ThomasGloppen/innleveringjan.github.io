@@ -19,8 +19,8 @@ CREATE TABLE "billett" (
   "stedid" int,
   "dato" date NOT NULL,
   "type" text default 'basic' check (
-    innlevert = 'basic'
-    or innlevert = 'VIP'
+    type = 'basic'
+    or type = 'VIP'
     ),
   "antallbilletter" text
 );
