@@ -5,7 +5,7 @@
   template.innerHTML = `
           <style>
             table {
-              width: var(--tsize, 100%);
+              width: 100%;
               border-collapse:collapse;
             }
             #thead {
@@ -33,14 +33,6 @@
             td.hidden {
               display:none;
             }
-            td.true, td.false {
-              text-align: center;
-              color: green;
-              font-size: 1.2rem;
-            } 
-            td.false {
-              color:red;
-            }
             td.number {
               text-align: right;
               color: blue;
@@ -52,11 +44,11 @@
               font-weight:bold;
             }
             tr.selected {
-              box-shadow: inset 0 0 5px blue;
+              box-shadow: inset 0 0 5px green;
             }
             table.error thead tr {
               box-shadow: inset 0 0 5px red, 0 0 0 orange;
-              animation: pulse 1s alternate infinite;
+              animation: pulse 500ms alternate infinite;
             }
             @keyframes pulse {
               100% { box-shadow: inset 0 0 2px black, 0 0 6px red; }
@@ -72,34 +64,12 @@
           </table>
       `;
 
-  const formatField = (type, value) => {
-    // NOTE (value == null) covers (value == undefined) also
-    switch (type) {
-      case "boolean":
-        return (value ? {type:'true', value:'✓'} : { type:'false',value:'✗'});
-      case "number":
-        return {type, value:+value };
-      case "money":
-        return {type:"number", value:(+value).toFixed(2) };
-      case "int":
-        return {type:"number", value:Math.trunc(+value)};
-      case "date":
-        let date = "";
-        date = value == null ? "" : value.split("T")[0];
-        return {type,value:date};
-      default:
-        let cleanValue = value === null ? "" : value;
-        return {type,value:cleanValue};
-    }
-  };
-
   class DBTable extends HTMLElement {
     constructor() {
       super();
       this.selectedRow;
       this.rows = []; // data from sql
       this.key = "";
-      this.refsql = ""; // set if updated by dbupdate - reused by simple refresh
       this.delete = "";
       this.connected = ""; // use given db-component as where, assumed to implement get.value
       // also assumed to emit dbUpdate
@@ -108,38 +78,33 @@
       addEventListener("dbUpdate", e => {
         let source = e.detail.source;
         let table = e.detail.table;
-        let done = false;
-        if (source && this.connected !== "") {
-          // otherwise do an update
+        if (this.connected !== "") {
+          // NOTE update ignored if connected is set
           let [id, field] = this.connected.split(":");
-          if (id === source) {
-            done = true;
-            let dbComponent = document.getElementById(id);
-            if (dbComponent) {
-              // component found - get its value
-              let value = dbComponent.value || "";
-              if (value !== "") {
-                // check that sql does not have where clause and value is int
-                let sql = this.sql;
-                let intvalue = Math.trunc(Number(value));
-                if (sql.includes("where") || !Number.isInteger(intvalue))
-                  return; // do nothing
-                sql += ` where ${field} = ${intvalue}`; // value is integer
-                this.refsql = sql; // reuse if refreshed by update
-                this.redraw(sql);
-              } else {
-                // we must redraw as empty
-                let divBody = this._root.querySelector("#tbody");
-                divBody.innerHTML = "";
-                this.selectedRow = undefined;
-                this.trigger({}); // cascade
-              }
+          if (id !== source) return; // we are not interested
+          let dbComponent = document.getElementById(id);
+          if (dbComponent) {
+            // component found - get its value
+            let value = dbComponent.value || "";
+            if (value !== "") {
+              // check that sql does not have where clause and value is int
+              let sql = this.sql;
+              let intvalue = Math.trunc(Number(value));
+              if (sql.includes("where") || !Number.isInteger(intvalue)) return; // do nothing
+              sql += ` where ${field} = ${intvalue}`; // value is integer
+              this.redraw(sql);
+            } else {
+              // we must redraw as empty
+              let divBody = this._root.querySelector("#tbody");
+              divBody.innerHTML = "";
+              this.selectedRow = undefined;
+              this.trigger({}); // cascade
             }
           }
+        } else {
+          if (this.update && this.update === table) this.redraw(this.sql);
         }
-        // check if we need a simple refresh
-        if (!done && this.update && this.update === table)
-          this.redraw(this.refsql || this.sql);
+        //if (this.update === table) this.redraw(this.sql);
       });
       // can set focus on a row in table
       let divBody = this._root.querySelector("#tbody");
@@ -206,6 +171,55 @@
           th.className = type;
           divThead.appendChild(th);
         }
+        if (this.delete) {
+          let th = document.createElement("th");
+          th.innerHTML = "<button>x</button>";
+          divThead.appendChild(th);
+          divThead.querySelector("button").addEventListener("click", () => {
+            let table = this.delete;
+            let leader = this.fieldlist[0].name;
+            let selected = Array.from(divBody.querySelectorAll("input:checked"))
+              .map(e => e.value)
+              .join(",");
+            let sql = `delete from ${table} where ${leader} in (${selected})`;
+            let data = {};
+            let init = {
+              method: "POST",
+              credentials: "include",
+              body: JSON.stringify({ sql, data }),
+              headers: {
+                "Content-Type": "application/json"
+              }
+            };
+            fetch("/runsql", init)
+              .then(r => r.json())
+              .then(data => {
+                let list = data.results;  // check for errors
+                let htmltable = this._root.querySelector("table");
+                if (list.error) {
+                  htmltable.classList.add("error");
+                  htmltable.title = sql + "\n" + list.error;
+                  return;
+                } else {
+                  this.trigger({ delete: true, table });
+                }
+              }).catch(e => console.log(e.message));
+            /*
+            fetch("/runsql", init)
+              .then(resp => {
+                if (resp && resp.error) {
+                  let htmltable = this._root.querySelector("table");
+                  htmltable.classList.add("error");
+                  htmltable.title = sql + "\n" + resp.error;
+                  return;
+                }
+                // others may want to refresh view
+                this.trigger({ delete: true, table });
+              })
+              .catch(e => console.log(e.message));
+              */
+          });
+        }
       }
       if (name === "connected") {
         this.connected = newValue;
@@ -225,41 +239,6 @@
         // delete from tablename where field in ( collect field.value of checked rows)
         // the first field value is stored on checkbox to make this easy
         this.delete = newValue;
-
-        let th = document.createElement("th");
-        th.innerHTML = "<button>x</button>";
-        divThead.appendChild(th);
-        divThead.querySelector("button").addEventListener("click", () => {
-          let table = this.delete;
-          let leader = this.fieldlist[0].name;
-          let selected = Array.from(divBody.querySelectorAll("input:checked"))
-            .map(e => e.value)
-            .join(",");
-          let sql = `delete from ${table} where ${leader} in (${selected})`;
-          let data = {};
-          let init = {
-            method: "POST",
-            credentials: "include",
-            body: JSON.stringify({ sql, data }),
-            headers: {
-              "Content-Type": "application/json"
-            }
-          };
-          fetch("/runsql", init)
-            .then(r => r.json())
-            .then(data => {
-              let list = data.results; // check for errors
-              let htmltable = this._root.querySelector("table");
-              if (list.error) {
-                htmltable.classList.add("error");
-                htmltable.title = sql + "\n" + list.error;
-                return;
-              } else {
-                this.trigger({ update: true, table });
-              }
-            })
-            .catch(e => console.log(e.message));
-        });
       }
     }
 
@@ -299,10 +278,7 @@
                 .map(
                   (e, i) =>
                     `<tr data-idx="${i}">${headers
-                      .map((h, i) => {
-                        let {value,type} = formatField(h.type,e[h.name]);
-                        return `<td class="${type}">${value}</td>`
-                      })
+                      .map((h, i) => `<td class="${h.type}">${e[h.name]}</td>`)
                       .join("")} ${
                       chkDelete
                         ? `<td><input type="checkbox" value="${e[leader]}"></td>`
