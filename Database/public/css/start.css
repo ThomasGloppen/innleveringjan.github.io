@@ -15,7 +15,7 @@ body {
     margin-top: 15%;
 }
 
-a:visited {
+#login > a:visited {
     color: blueviolet;
     font-size: 5em;
     position: relative;
@@ -23,10 +23,11 @@ a:visited {
     left: 50px;
 }
 
-a {
+#login > a {
     color: blue;
     font-size: 5em;
     position: relative;
     top: 100px;
     left: 50px;
 }
+
