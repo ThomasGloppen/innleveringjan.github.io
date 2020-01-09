@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Legg til sted</title>
+    <script src="/components/DbInsert.js"></script>
+    <script src="/components/DbTable.js"></script>
+    <script src="/components/DbForeign.js"></script>
+    <script src="/components/Homebar.js"></script>
+</head>
+<body>
+        <home-bar heading="Legg til sted" crumb="sted" getlinks="/htmlfiler/admin" username="/myself">
+        </home-bar>
+    <div id="admin">
+
+
+        <div class="table">
+            <db-table id="table" update="sted" delete="sted" fields="stedid:hidden,navn,adresse" sql="select * from sted">
+                <span slot="caption">Forfattere</span>
+            </db-table>
+        </div>
+
+        <db-insert id="form" fields="navn,adresse" table="sted">
+            <span slot="heading">Registrer sted</span>
+        </db-insert>
+
+    </div>
+</body>
+</html>
