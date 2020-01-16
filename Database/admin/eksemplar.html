@@ -12,18 +12,18 @@
     <link rel="stylesheet" href="css/admin.css">
 </head>
 <body>
-        <home-bar heading="Legg til billett" crumb="billett" getlinks="/htmlfiler/admin" username="/myself">
+        <home-bar heading="Legg til eksemplarer" getlinks="/htmlfiler/admin" username="/myself">
         </home-bar>
     <div id="admin">
 
 
         <div class="table">
-            <db-table id="table" update="billett" delete="billett" fields="billettid:hidden,navn,dato:date,type" sql="select * from billett b inner join sted s on (s.stedid = b.stedid) ">
-                <span slot="caption">Billett</span>
+            <db-table id="table" update="eksemplar" delete="eksemplar" fields="eksemplarid:hidden,sted," sql="select * from billett b inner join sted s on (s.stedid = b.stedid) inner join eksemplar e on (e.billettid = b.billettid) ">
+                <span slot="caption">eksemplarer</span>
             </db-table>
         </div>
 
-        <db-insert id="form" fields="dato:date,type" foreign="sted.stedid:navn" table="billett">
+        <db-insert id="form" fields="eksemplarid" foreign="sted.stedid:navn" table="eksemplar">
             <span slot="heading">Registrer billett</span>
         </db-insert>
 
