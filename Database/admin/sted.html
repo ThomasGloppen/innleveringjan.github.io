@@ -16,15 +16,16 @@
     <div id="admin">
 
 
-        <div class="table">
-            <db-table id="table" update="sted" delete="sted" fields="stedid:hidden,navn,adresse" sql="select * from sted">
-                <span slot="caption">Forfattere</span>
-            </db-table>
-        </div>
-
         <db-insert id="form" fields="navn,adresse" table="sted">
             <span slot="heading">Registrer sted</span>
         </db-insert>
+
+
+        <div class="table">
+            <db-table id="table" update="sted"  fields="stedid:hidden,navn,adresse" delete="sted" sql="select * from sted">
+                <span slot="caption">Steder</span>
+            </db-table>
+        </div>
 
     </div>
 </body>

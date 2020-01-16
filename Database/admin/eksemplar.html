@@ -18,12 +18,12 @@
 
 
         <div class="table">
-            <db-table id="table" update="eksemplar" delete="eksemplar" fields="eksemplarid:hidden,sted," sql="select * from billett b inner join sted s on (s.stedid = b.stedid) inner join eksemplar e on (e.billettid = b.billettid) ">
+            <db-table id="table" update="eksemplar" fields="eksemplarid:hidden,adresse,type,dato:date" delete="eksemplar"  sql="select * from eksemplar e inner join billett b on (b.billettid = e.billettid) inner join sted s on (s.stedid = b.stedid)">
                 <span slot="caption">eksemplarer</span>
             </db-table>
         </div>
 
-        <db-insert id="form" fields="eksemplarid" foreign="sted.stedid:navn" table="eksemplar">
+        <db-insert id="form" fields="type" foreign="billett.billettid:billettid" table="eksemplar">
             <span slot="heading">Registrer billett</span>
         </db-insert>
 

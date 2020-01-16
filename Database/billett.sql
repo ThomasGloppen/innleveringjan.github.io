@@ -27,6 +27,7 @@ CREATE TABLE "billett" (
 
 CREATE TABLE "eksemplar" (
   "eksemplarid" SERIAL PRIMARY KEY,
+  "type" text,
   "billettid" int
 );
 

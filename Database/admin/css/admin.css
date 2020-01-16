@@ -23,8 +23,9 @@
       justify-self: center;
   }
   
+
   .table {
-    width: 30em;
+    margin-left: 50%;
     grid-area: view;
   }
   
