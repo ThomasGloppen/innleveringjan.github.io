@@ -1,14 +1,22 @@
 h1 {
     text-align: center;
-    color: rgb(9, 131, 131)
+    color: rgb(235, 212, 12);
+    font: bold;
+}
+h2 {
+    text-align: center;
+    color: aqua;
 }
 
+
+
 body {
-    background-color: gold;
+    background-color:black;
 }
 
 #MOV {
-    margin-left: 40%;
+    margin-left: 0%;
+    text-align: center;
 
 }
 
