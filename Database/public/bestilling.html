@@ -4,28 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>Legg til billett</title>
     <script src="/components/DbInsert.js"></script>
     <script src="/components/DbTable.js"></script>
+    <script src="/components/DbForeign.js"></script>
     <script src="/components/Homebar.js"></script>
-    <link rel="stylesheet" href="alt.css">
+    <link rel="stylesheet" href="css/alt.css">
 </head>
 <body>
-    <home-bar heading="Kjøp billetter" username="/myself" getlinks="/htmlfiler/public">
-    </home-bar>
+        <home-bar heading="Legg til bestilling" getlinks="/htmlfiler/public" username="/myself">
+        </home-bar>
+    <div id="admin">
 
-    <h1>Bestill billetter</h1>
 
-    <div id="main">
-        <db-table id="table" fields="tittel,fornavn,etternavn,antallsider"
-            sql="select * from bok b inner join forfatter f on (b.forfatterid = f.forfatterid)">
-            <span slot="caption">Bøker</span>
-        </db-table>
+        <div class="table">
+            <db-table id="table" update="bestilling" fields="bestillingid,brukernavn,kplass" delete="bestilling"  sql="select * from bestilling be inner join kunde k on (k.brukernavn = be.brukernavn) inner join billett b on (b.kplass = be.kplass);">
+                <span slot="caption">eksemplarer</span>
+            </db-table>
+        </div>
+
+        <div class="form">
+        <db-insert id="form" foreign="kunde.brukernavn:brukernavn,billett.kplass:kplass" table="bestilling">
+            <span slot="heading">Registrer bestilling</span>
+        </db-insert>
+        </div>
     </div>
-
-
-
-
 </body>
 </html>

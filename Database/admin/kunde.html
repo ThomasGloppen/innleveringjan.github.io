@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Legg til billett</title>
+    <title>Legg til kunde</title>
     <script src="/components/DbInsert.js"></script>
     <script src="/components/DbTable.js"></script>
     <script src="/components/DbForeign.js"></script>
@@ -12,19 +12,19 @@
     <link rel="stylesheet" href="css/admin.css">
 </head>
 <body>
-        <home-bar heading="Legg til eksemplarer" getlinks="/htmlfiler/admin" username="/myself">
+        <home-bar heading="Legg til kunde" getlinks="/htmlfiler/admin" username="/myself">
         </home-bar>
     <div id="admin">
 
 
         <div class="table">
-            <db-table id="table" update="eksemplar" fields="eksemplarid:hidden,adresse,type,dato:date" delete="eksemplar"  sql="select * from eksemplar e inner join billett b on (b.billettid = e.billettid) inner join sted s on (s.stedid = b.stedid)">
-                <span slot="caption">eksemplarer</span>
+            <db-table id="table" update="kunde" fields="brukernavn,fornavn,etternavn,adresse,epost,tlf,kjonn" delete="kunde"  sql="select * from kunde;">
+                <span slot="caption">Kunder</span>
             </db-table>
         </div>
 
-        <db-insert id="form" fields="type" foreign="billett.billettid:billettid" table="eksemplar">
-            <span slot="heading">Registrer billett</span>
+        <db-insert id="form" fields="brukernavn,fornavn,etternavn,adresse,epost,tlf,kjonn" foreign="" table="kunde">
+            <span slot="heading">Registrer kunde</span>
         </db-insert>
 
     </div>

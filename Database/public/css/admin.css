@@ -4,12 +4,12 @@
 **/
 
 
-:root {
-    --light-grad: linear-gradient(125deg, rgba(255,255,255,0), rgba(255,255,255,.16));
-    --dark-grad: linear-gradient(125deg, rgba(0,0,0,0), rgba(0,0,0,.16));
+
+  
+  body {
+    background-color: black;
   }
-  
-  
+
   #admin {
     margin: 10px;
     display: grid;
@@ -39,8 +39,8 @@
   
   db-table {
     margin: 2em;
-     --alternate: rgba(188, 208, 228, 0.555);
-     --head: oldlace;
+     --alternate: rgba(188, 228, 191, 0.555);
+     --head: green;
   }
 
   #total {

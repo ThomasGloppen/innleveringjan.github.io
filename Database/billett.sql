@@ -1,11 +1,14 @@
+drop table kunde,sted,billett,bestilling cascade;
+
+
 CREATE TABLE "kunde" (
-  "kundeid" SERIAL PRIMARY KEY,
+  "brukernavn" text PRIMARY KEY,
   "fornavn" text NOT NULL,
   "etternavn" text NOT NULL,
   "adresse" text,
   "epost" text,
   "tlf" text,
-  "kjønn" text
+  "kjonn" text
 );
 
 CREATE TABLE "sted" (
@@ -15,33 +18,22 @@ CREATE TABLE "sted" (
 );
 
 CREATE TABLE "billett" (
-  "billettid" SERIAL PRIMARY KEY,
+  "kplass" text PRIMARY KEY,
   "stedid" int,
   "dato" date NOT NULL,
-  "type" text default 'basic' check (
-    type = 'basic'
-    or type = 'VIP'
-    ),
-  "antallbilletter" text
-);
-
-CREATE TABLE "eksemplar" (
-  "eksemplarid" SERIAL PRIMARY KEY,
   "type" text,
-  "billettid" int
+  "antallbilletter" text
 );
 
 CREATE TABLE "bestilling" (
   "bestillingid" SERIAL PRIMARY KEY,
-  "eksemplarid" int,
-  "kundeid" int,
+  "kplass" text not null,
+  "brukernavn" text not null,
   "bdato" date
 );
 
 ALTER TABLE "billett" ADD FOREIGN KEY ("stedid") REFERENCES "sted" ("stedid");
 
-ALTER TABLE "eksemplar" ADD FOREIGN KEY ("billettid") REFERENCES "billett" ("billettid");
+ALTER TABLE "bestilling" ADD FOREIGN KEY ("kplass") REFERENCES "billett" ("kplass");
 
-ALTER TABLE "bestilling" ADD FOREIGN KEY ("kundeid") REFERENCES "kunde" ("kundeid");
-
-ALTER TABLE "bestilling" ADD FOREIGN KEY ("eksemplarid") REFERENCES "eksemplar" ("eksemplarid");
+ALTER TABLE "bestilling" ADD FOREIGN KEY ("brukernavn") REFERENCES "kunde" ("brukernavn");
