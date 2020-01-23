@@ -1,0 +1,31 @@
+h1 {
+    text-align: center;
+    color: whitesmoke;
+    font-size: 3em;
+}
+h2 {
+    color: whitesmoke;
+    text-align: center;
+    font-size: 2em;
+}
+div {
+    color: rgb(218, 158, 49);
+    margin-top: 5%;
+}
+
+span {
+    color: whitesmoke;
+}
+body {
+    background-color: black;
+    
+}
+
+#bilde {
+    background-position: center;
+    background-size: cover;
+    border: solid 1px gray;
+    width: 98vw;
+    height: 80vh;
+    background-image: url(bilder/OmOss.jpg);
+}
