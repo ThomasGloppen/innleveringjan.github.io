@@ -15,10 +15,10 @@ body {
     background-color: lightgreen;
 }
 
-#diagram {
-    background-image: url(Bilder/db2.png);
-    background-size: contain; 
-    height: 500px;
+#frame {
+    margin-right: 10%;
+    margin-left: 10%;
+    align-content: center;
 }
 
 #grid {
