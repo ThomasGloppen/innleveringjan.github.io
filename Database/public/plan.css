@@ -1,0 +1,82 @@
+h1, h2 {
+    text-align: center;
+    color: blue;
+}
+
+div {
+    border: solid grey 2px;
+    margin-right: 20%;
+    margin-left: 20%;
+    background-color: white;
+    margin-bottom: 2em;
+}
+
+body { 
+    background-color: lightgreen;
+}
+
+#diagram {
+    background-image: url(Bilder/db2.png);
+    background-size: contain; 
+    height: 500px;
+}
+
+#grid {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-areas: 
+    ". . index . ."
+    ". . public . ."
+    "omoss plan login bestilling visning"
+    ". . admin . ."
+    ". billett kunde sted . ";
+}
+
+#grid > div {
+    text-align: center;
+    margin-bottom: 1em;
+}
+
+#visning {
+    grid-area: visning;
+}
+
+#bestilling {
+    grid-area: bestilling;
+}
+
+#plan {
+    grid-area: plan;
+}
+
+#omoss {
+    grid-area: omoss;
+}
+
+#billett {
+    grid-area: billett;
+}
+
+#kunde {
+    grid-area: kunde;
+}
+
+#sted {
+    grid-area: sted;
+}
+
+#admin {
+    grid-area: admin;
+}
+
+#login {
+    grid-area: login;
+}
+
+#public {
+    grid-area: public;
+}
+
+#index {
+    grid-area: index;
+}
