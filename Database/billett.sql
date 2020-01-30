@@ -22,7 +22,7 @@ CREATE TABLE "billett" (
   "stedid" int,
   "dato" date NOT NULL,
   "type" text,
-  "antallbilletter" text
+  "pris" int
 );
 
 CREATE TABLE "bestilling" (

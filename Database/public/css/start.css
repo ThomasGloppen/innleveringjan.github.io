@@ -1,9 +1,11 @@
 body {
-    background-image: url(/Database/public/bilder/fest.JPG);
+    background-image: url(fest.jpg);
     background-position: center;
     background-size: cover;
     height: 1000px;
 }
+
+
 
 #login {
     height: 300px;

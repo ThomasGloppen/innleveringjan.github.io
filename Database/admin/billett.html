@@ -9,6 +9,7 @@
     <script src="/components/DbTable.js"></script>
     <script src="/components/DbForeign.js"></script>
     <script src="/components/Homebar.js"></script>
+    <script src="/components/DbUpdate.js"></script>
     <link rel="stylesheet" href="css/admin.css">
 </head>
 <body>
@@ -17,16 +18,19 @@
     <div id="admin">
 
 
-        <div class="table">
-            <db-table id="table" update="billett"  fields="kplass,type,dato:date" delete="billett" sql="select * from billett b inner join sted s on (s.stedid = b.stedid) ">
-                <span slot="caption">Billett</span>
-            </db-table>
-        </div>
-
-        <db-insert id="form" fields="kplass,type,dato:date" foreign="sted.stedid:navn" table="billett">
+        <db-insert id="form" fields="kplass,type,dato:date,pris" foreign="sted.stedid:navn" table="billett">
             <span slot="heading">Registrer billett</span>
         </db-insert>
 
+        <db-update key="kplass" update="billett" fields="kplass,type,dato:date,pris"  table="billett">
+                <span slot="heading">Oppdater billett</span>
+            </db-update>
+
+        <div class="table">
+            <db-table id="table" update="billett"  fields="kplass,type,dato:date,pris" delete="billett" sql="select * from billett b inner join sted s on (s.stedid = b.stedid) ">
+                <span slot="caption">Billett</span>
+            </db-table>
+        </div>
     </div>
 </body>
 </html>
